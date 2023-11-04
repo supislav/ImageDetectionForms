@@ -1,0 +1,10 @@
+F:\MEGA\Študij\2. LETNIK\1. ZIMSKI SEMESTER\Notranji transport in logistika\Seminarska naloga\C#\Drum\bin\Release\Drum.exe.config
+F:\MEGA\Študij\2. LETNIK\1. ZIMSKI SEMESTER\Notranji transport in logistika\Seminarska naloga\C#\Drum\bin\Release\Drum.exe
+F:\MEGA\Študij\2. LETNIK\1. ZIMSKI SEMESTER\Notranji transport in logistika\Seminarska naloga\C#\Drum\bin\Release\Drum.pdb
+F:\MEGA\Študij\2. LETNIK\1. ZIMSKI SEMESTER\Notranji transport in logistika\Seminarska naloga\C#\Drum\obj\Release\Drum.csproj.AssemblyReference.cache
+F:\MEGA\Študij\2. LETNIK\1. ZIMSKI SEMESTER\Notranji transport in logistika\Seminarska naloga\C#\Drum\obj\Release\Drum.MainForm.resources
+F:\MEGA\Študij\2. LETNIK\1. ZIMSKI SEMESTER\Notranji transport in logistika\Seminarska naloga\C#\Drum\obj\Release\Drum.Properties.Resources.resources
+F:\MEGA\Študij\2. LETNIK\1. ZIMSKI SEMESTER\Notranji transport in logistika\Seminarska naloga\C#\Drum\obj\Release\Drum.csproj.GenerateResource.cache
+F:\MEGA\Študij\2. LETNIK\1. ZIMSKI SEMESTER\Notranji transport in logistika\Seminarska naloga\C#\Drum\obj\Release\Drum.csproj.CoreCompileInputs.cache
+F:\MEGA\Študij\2. LETNIK\1. ZIMSKI SEMESTER\Notranji transport in logistika\Seminarska naloga\C#\Drum\obj\Release\Drum.exe
+F:\MEGA\Študij\2. LETNIK\1. ZIMSKI SEMESTER\Notranji transport in logistika\Seminarska naloga\C#\Drum\obj\Release\Drum.pdb
