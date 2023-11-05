@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace Drum
 {
@@ -24,7 +23,7 @@ namespace Drum
         // Aproximation of points
         public static LinearFunction Aproximation(Bitmap image)
         {
-            points = FindWhiteGreenPixels(image);
+            points = FindWhiteOrGreenPixels(image);
             double sumX = 0;
             double sumY = 0;
             double sumXY = 0;
@@ -46,7 +45,7 @@ namespace Drum
         }
 
         // Find the white pixels (points for approximation)
-        private static Point[] FindWhiteGreenPixels(Bitmap bitmap)
+        private static Point[] FindWhiteOrGreenPixels(Bitmap bitmap)
         {
             List<Point> whiteGreenPixels = new List<Point>();
 
@@ -55,9 +54,8 @@ namespace Drum
                 for (int x = 0; x < bitmap.Width; x++)
                 {
                     Color pixel = bitmap.GetPixel(x, y);
-                    //IsGreen(pixel)
                     //pixel.R == 255 && pixel.G == 255 && pixel.B == 255
-                    if (pixel.R == 255 && pixel.G == 255 && pixel.B == 255) // Check if the pixel is white
+                    if (IsWhite(pixel)) // Check if the pixel is white
                     {
                         whiteGreenPixels.Add(new Point(x, y));
                     }
@@ -70,11 +68,27 @@ namespace Drum
             return whiteGreenPixels.ToArray();
         }
 
+        // Check if the pixel is green-ish
         private static bool IsGreen(Color color)
         {
-            int greenThreshold = 100; // Adjust as needed
+            int greenThreshold = 100;
 
             if (color.G - color.R > greenThreshold && color.G - color.B > greenThreshold)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        // Check if the pixel is white-ish
+        private static bool IsWhite(Color color)
+        {
+            int whiteThreshold = 100;
+
+            if (color.R > whiteThreshold && color.G > whiteThreshold && color.B > whiteThreshold)
             {
                 return true;
             }

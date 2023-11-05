@@ -42,20 +42,22 @@ namespace Drum
             Bitmap edgeImage = new Bitmap(originalImage);
 
             // Definition of circle
-            int centerX = originalImage.Width/2; // 150
-            int centerY = originalImage.Height/2; // 150
+            int centerX = originalImage.Width / 2; // 150
+            int centerY = originalImage.Height / 2; // 150
             int radius = ((centerX + centerY) / 2) - 5; // 145
 
             stopwatch.Start();
             // Clear pixels outside of circle and run Sobel algorithm
             Bitmap processedImage = SetPixelsOutsideCircleToBlack(originalImage);
-            // Dispose the used image
+            // Dispose of the used image
             originalImage.Dispose();
+            // Run Gaussian blur algorithm to blur the edges
+            //processedImage = GaussianBlur(processedImage, 3, 1.4);
             // Run Sobel algorithm to detect an edge on image that was already processed.
             edgeImage = SobelAlgorithm(processedImage, centerX, centerY, radius);
             stopwatch.Stop();
 
-            // Dispose the used image
+            // Dispose of the used image
             processedImage.Dispose();
 
             // Get the actual function that best fits the points
@@ -71,22 +73,25 @@ namespace Drum
         }
 
         // Save the processed image as PNG
-        public static void Save(ref PictureBox pictureBox)
+        public static void Save(PictureBox pictureBox)
         {
-            Bitmap imageToBeSaved = new Bitmap(pictureBox.Image);
-            SaveFileDialog sfd = new SaveFileDialog();
-            sfd.Filter = "Image Files|*.png";
-            sfd.FileName = $"{DateTime.Now:yyyy_MM_dd_HH_mm_ss}.png";
-
-            if (sfd.ShowDialog() == DialogResult.OK)
+            if (pictureBox.Image != null)
             {
-                try
+                Bitmap imageToBeSaved = new Bitmap(pictureBox.Image);
+                SaveFileDialog sfd = new SaveFileDialog();
+                sfd.Filter = "PNG Files|*.png";
+                sfd.FileName = $"{DateTime.Now:yyyy_MM_dd_HH_mm_ss}.png";
+
+                if (sfd.ShowDialog() == DialogResult.OK)
                 {
-                    imageToBeSaved.Save(sfd.FileName, System.Drawing.Imaging.ImageFormat.Png);
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show($"Something went wrong! This is the message: {ex.Message}");
+                    try
+                    {
+                        imageToBeSaved.Save(sfd.FileName, System.Drawing.Imaging.ImageFormat.Png);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"Something went wrong! This is the message: {ex.Message}");
+                    }
                 }
             }
         }
@@ -113,9 +118,8 @@ namespace Drum
                         // Normalize the magnitude to fit within the valid range
                         magnitude = Math.Max(0, Math.Min(255, magnitude));
 
-                        // Set the new color based on the magnitude
-                        //Color newColor = Color.FromArgb(magnitude, magnitude, magnitude);
-                        Color newColor = magnitude > 128 ? Color.White : Color.Black; // Set to white if the magnitude is greater than 128, otherwise set to black
+                        // Set to white if the magnitude is greater than 128, otherwise set to black
+                        Color newColor = magnitude > 128 ? Color.White : Color.Black; 
                         edgeDetectedImage.SetPixel(x, y, newColor);
                     }
                 }
@@ -223,7 +227,6 @@ namespace Drum
             return true;
         }
 
-
         // Check if the green component is significantly higher than red and blue
         static bool IsGreen(Color color)
         {
@@ -238,5 +241,71 @@ namespace Drum
                 return false;
             }
         }
+
+        //// Gaussian blur
+        //public static Bitmap GaussianBlur(Bitmap image, int radius, double sigma)
+        //{
+        //    int size = 2 * radius + 1;
+        //    double[,] kernel = new double[size, size];
+        //    double sumTotal = 0;
+
+        //    for (int y = -radius; y <= radius; y++)
+        //    {
+        //        for (int x = -radius; x <= radius; x++)
+        //        {
+        //            double distance = x * x + y * y;
+        //            double value = Math.Exp(-distance / (2 * sigma * sigma)) / (2 * Math.PI * sigma * sigma);
+        //            kernel[y + radius, x + radius] = value;
+        //            sumTotal += value;
+        //        }
+        //    }
+
+        //    for (int y = 0; y < size; y++)
+        //    {
+        //        for (int x = 0; x < size; x++)
+        //        {
+        //            kernel[y, x] /= sumTotal;
+        //        }
+        //    }
+
+        //    Bitmap blurredImage = new Bitmap(image.Width, image.Height);
+        //    int[,] red = new int[image.Width, image.Height];
+        //    int[,] green = new int[image.Width, image.Height];
+        //    int[,] blue = new int[image.Width, image.Height];
+
+        //    for (int y = 0; y < image.Height; y++)
+        //    {
+        //        for (int x = 0; x < image.Width; x++)
+        //        {
+        //            Color pixel = image.GetPixel(x, y);
+        //            red[x, y] = pixel.R;
+        //            green[x, y] = pixel.G;
+        //            blue[x, y] = pixel.B;
+        //        }
+        //    }
+
+        //    for (int y = radius; y < image.Height - radius; y++)
+        //    {
+        //        for (int x = radius; x < image.Width - radius; x++)
+        //        {
+        //            double redSum = 0, greenSum = 0, blueSum = 0;
+
+        //            for (int j = -radius; j <= radius; j++)
+        //            {
+        //                for (int i = -radius; i <= radius; i++)
+        //                {
+        //                    redSum += red[x + i, y + j] * kernel[j + radius, i + radius];
+        //                    greenSum += green[x + i, y + j] * kernel[j + radius, i + radius];
+        //                    blueSum += blue[x + i, y + j] * kernel[j + radius, i + radius];
+        //                }
+        //            }
+
+        //            blurredImage.SetPixel(x, y, Color.FromArgb((int)redSum, (int)greenSum, (int)blueSum));
+        //        }
+        //    }
+
+        //    return blurredImage;
+        //}
+
     }
 }

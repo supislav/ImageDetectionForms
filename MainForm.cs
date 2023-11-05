@@ -17,6 +17,13 @@ namespace Drum
         public MainForm()
         {
             InitializeComponent();
+
+            // Create context menus
+            Tools picture1Tools = new Tools();
+            Tools picture2Tools = new Tools();
+
+            picture1Tools.PictureContextMenu(picture1);
+            picture2Tools.PictureContextMenu(picture2);
         }
 
         Bitmap originalImage;
@@ -37,7 +44,7 @@ namespace Drum
 
         private void btnSave_Click(object sender, EventArgs e)
         {
-            Image.Save(ref picture2);
+            Image.Save(picture2);
         }
 
         private void btnSaveCSV_Click(object sender, EventArgs e)
