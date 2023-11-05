@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Drum
 {
@@ -17,13 +18,13 @@ namespace Drum
             Y = y;
         }
 
-        public static Point[] points { get; private set; }
+        public static Point[] points { get; set; }
 
 
         // Aproximation of points
         public static LinearFunction Aproximation(Bitmap image)
         {
-            points = FindWhitePixels(image);
+            points = FindWhiteGreenPixels(image);
             double sumX = 0;
             double sumY = 0;
             double sumXY = 0;
@@ -45,22 +46,42 @@ namespace Drum
         }
 
         // Find the white pixels (points for approximation)
-        private static Point[] FindWhitePixels(Bitmap bitmap)
+        private static Point[] FindWhiteGreenPixels(Bitmap bitmap)
         {
-            List<Point> whitePixels = new List<Point>();
+            List<Point> whiteGreenPixels = new List<Point>();
 
             for (int y = 0; y < bitmap.Height; y++)
             {
                 for (int x = 0; x < bitmap.Width; x++)
                 {
                     Color pixel = bitmap.GetPixel(x, y);
+                    //IsGreen(pixel)
+                    //pixel.R == 255 && pixel.G == 255 && pixel.B == 255
                     if (pixel.R == 255 && pixel.G == 255 && pixel.B == 255) // Check if the pixel is white
                     {
-                        whitePixels.Add(new Point(x, y));
+                        whiteGreenPixels.Add(new Point(x, y));
+                    }
+                    if (IsGreen(pixel)) // Check if the pixel is green
+                    {
+                        whiteGreenPixels.Add(new Point(x, y));
                     }
                 }
             }
-            return whitePixels.ToArray();
+            return whiteGreenPixels.ToArray();
+        }
+
+        private static bool IsGreen(Color color)
+        {
+            int greenThreshold = 100; // Adjust as needed
+
+            if (color.G - color.R > greenThreshold && color.G - color.B > greenThreshold)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         // Save calculated points to .CSV file (it has to be in this, because othervise you have to pass in the array of points)

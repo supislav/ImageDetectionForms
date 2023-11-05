@@ -9,10 +9,12 @@ namespace Drum
 {
     internal static class Image
     {
-        public static void Open(ref Bitmap originalImage, ref PictureBox picture)
+        public static Bitmap Open()
         {
             OpenFileDialog ofd = new OpenFileDialog();
             ofd.Filter = "Image Files|*.jpg;*.jpeg;*.png;*.gif;*.bmp;*.tif;*.tiff|All files (*.*)|*.*";
+
+            Bitmap originalImage = null;
 
             if (ofd.ShowDialog() == DialogResult.OK)
             {
@@ -21,7 +23,7 @@ namespace Drum
                     if (ofd.OpenFile() != null)
                     {
                         originalImage = new Bitmap(ofd.FileName);
-                        picture.Image = new Bitmap(originalImage);
+                        return originalImage;
                     }
                 }
                 catch (Exception ex)
@@ -29,21 +31,24 @@ namespace Drum
                     MessageBox.Show("Error: Could not read file from disk. Original error: " + ex.Message);
                 }
             }
+            return originalImage;
         }
 
-        public static void Process(ref Bitmap originalImage, ref Bitmap edgeImage, ref PictureBox pictureBox)
+        public static Bitmap DetectEdges(ref Bitmap originalImage)
         {
             // Stopwatch
             Stopwatch stopwatch = new Stopwatch();
 
+            Bitmap edgeImage = new Bitmap(originalImage);
+
             // Definition of circle
-            int centerX = 150;
-            int centerY = 150;
-            int radius = 145;
+            int centerX = originalImage.Width/2; // 150
+            int centerY = originalImage.Height/2; // 150
+            int radius = ((centerX + centerY) / 2) - 5; // 145
 
             stopwatch.Start();
             // Clear pixels outside of circle and run Sobel algorithm
-            Bitmap processedImage = SetPixelsOutsideCircleToBlack(originalImage, centerX, centerY, radius);
+            Bitmap processedImage = SetPixelsOutsideCircleToBlack(originalImage);
             // Dispose the used image
             originalImage.Dispose();
             // Run Sobel algorithm to detect an edge on image that was already processed.
@@ -53,9 +58,6 @@ namespace Drum
             // Dispose the used image
             processedImage.Dispose();
 
-            // Set image with only the edge to be visible in picture2
-            pictureBox.Image = edgeImage;
-
             // Get the actual function that best fits the points
             LinearFunction linearFunction = Point.Aproximation(edgeImage);
             // Display the linear function in message box
@@ -63,12 +65,15 @@ namespace Drum
 
             // Display the time spent to process the image
             MessageBox.Show($"Time elapsed: {stopwatch.ElapsedMilliseconds} milliseconds");
+
+            // Set image with only the edge to be visible in picture2
+            return edgeImage;
         }
 
-
         // Save the processed image as PNG
-        public static void Save(ref Bitmap edgeImage)
+        public static void Save(ref PictureBox pictureBox)
         {
+            Bitmap imageToBeSaved = new Bitmap(pictureBox.Image);
             SaveFileDialog sfd = new SaveFileDialog();
             sfd.Filter = "Image Files|*.png";
             sfd.FileName = $"{DateTime.Now:yyyy_MM_dd_HH_mm_ss}.png";
@@ -77,7 +82,7 @@ namespace Drum
             {
                 try
                 {
-                    edgeImage.Save(sfd.FileName, System.Drawing.Imaging.ImageFormat.Png);
+                    imageToBeSaved.Save(sfd.FileName, System.Drawing.Imaging.ImageFormat.Png);
                 }
                 catch (Exception ex)
                 {
@@ -86,7 +91,7 @@ namespace Drum
             }
         }
 
-        // Apply Sobel edge detection algorithm within a specific circle
+        // Sobel edge detection algorithm within a specific circle
         static Bitmap SobelAlgorithm(Bitmap bitmap, int centerX, int centerY, int radius)
         {
             Bitmap edgeDetectedImage = new Bitmap(bitmap);
@@ -109,12 +114,13 @@ namespace Drum
                         magnitude = Math.Max(0, Math.Min(255, magnitude));
 
                         // Set the new color based on the magnitude
-                        Color newColor = Color.FromArgb(magnitude, magnitude, magnitude);
+                        //Color newColor = Color.FromArgb(magnitude, magnitude, magnitude);
+                        Color newColor = magnitude > 128 ? Color.White : Color.Black; // Set to white if the magnitude is greater than 128, otherwise set to black
                         edgeDetectedImage.SetPixel(x, y, newColor);
                     }
                 }
             }
-            edgeDetectedImage = SetPixelsOutsideCircleToBlack(edgeDetectedImage, centerX, centerY, radius - 2);
+            edgeDetectedImage = SetPixelsOutsideCircleToBlack(edgeDetectedImage, 2);
             return edgeDetectedImage;
         }
 
@@ -142,9 +148,13 @@ namespace Drum
         }
 
         // Set all the pixels outside of the circular area to be black
-        static Bitmap SetPixelsOutsideCircleToBlack(Bitmap bitmap, int centerX, int centerY, int radius)
+        static Bitmap SetPixelsOutsideCircleToBlack(Bitmap bitmap, int hack = 0)
         {
             Bitmap processedImage = new Bitmap(bitmap);
+
+            int centerX = bitmap.Width / 2;
+            int centerY = bitmap.Height / 2;
+            int radius = ((centerX + centerY) / 2) - 5 - hack;
 
             for (int y = 0; y < bitmap.Height; y++)
             {
@@ -159,6 +169,74 @@ namespace Drum
                 }
             }
             return processedImage;
+        }
+
+        // Boundary detection
+        public static Bitmap DetectBoundary(Bitmap image)
+        {
+            Stopwatch stopwatch = new Stopwatch();
+            Bitmap result = new Bitmap(image);
+            stopwatch.Start();
+            for (int y = 1; y < image.Height - 1; y++)
+            {
+                for (int x = 1; x < image.Width - 1; x++)
+                {
+                    if (Stamp(image, x, y)) result.SetPixel(x, y, Color.Black);
+                }
+            }
+
+            result = SetPixelsOutsideCircleToBlack(result, 2); // I don't know how to detect a circle.
+            stopwatch.Stop();
+
+            // Aproximate the points and get linear function parameters
+            LinearFunction linearFunction = Point.Aproximation(result);
+            // Display the linear function in message box
+            linearFunction.Show();
+
+            // Display the time spent to process the image
+            MessageBox.Show($"Time elapsed: {stopwatch.ElapsedMilliseconds} milliseconds");
+
+            return result;
+        }
+
+        static bool Stamp(Bitmap bitmap, int x, int y)
+        {
+            int[,] stamp = new int[,] { { 0, 1, 0 }, { 1, 1, 1 }, { 0, 1, 0 } };
+
+            // If the stamp cannot fit in the current position, return without marking as an edge.
+            if (x - 1 < 0 || y - 1 < 0 || x + 1 >= bitmap.Width || y + 1 >= bitmap.Height) return false;
+
+            for (int j = -1; j <= 1; j++)
+            {
+                for (int i = -1; i <= 1; i++)
+                {
+                    Color currentColor = bitmap.GetPixel(x + i, y + j);
+                    if (!IsGreen(currentColor) && stamp[j + 1, i + 1] == 1)
+                    {
+                        // If the stamp does not match the green pixels, return without marking as an edge.
+                        return false;
+                    }
+                }
+            }
+
+            // Mark the pixel as an edge if the stamp matches the green pixels.
+            return true;
+        }
+
+
+        // Check if the green component is significantly higher than red and blue
+        static bool IsGreen(Color color)
+        {
+            int greenThreshold = 100;
+
+            if (color.G - color.R > greenThreshold && color.G - color.B > greenThreshold)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }

@@ -30,27 +30,29 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
-            this.layout1 = new System.Windows.Forms.TableLayoutPanel();
             this.btnOpen = new System.Windows.Forms.ToolStripButton();
             this.btnSave = new System.Windows.Forms.ToolStripButton();
-            this.layout2 = new System.Windows.Forms.TableLayoutPanel();
-            this.picture1 = new System.Windows.Forms.PictureBox();
-            this.picture2 = new System.Windows.Forms.PictureBox();
-            this.btnDetectEdges = new System.Windows.Forms.ToolStripButton();
-            this.panel1 = new System.Windows.Forms.Panel();
             this.btnSaveCSV = new System.Windows.Forms.ToolStripButton();
+            this.layout1 = new System.Windows.Forms.TableLayoutPanel();
+            this.layout2 = new System.Windows.Forms.TableLayoutPanel();
+            this.picture2 = new System.Windows.Forms.PictureBox();
+            this.picture1 = new System.Windows.Forms.PictureBox();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.toolStripDropDownButton1 = new System.Windows.Forms.ToolStripDropDownButton();
+            this.btnDetectEdges = new System.Windows.Forms.ToolStripMenuItem();
+            this.btnBoundaryDetection = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStrip1.SuspendLayout();
             this.layout1.SuspendLayout();
             this.layout2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.picture1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picture2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picture1)).BeginInit();
             this.SuspendLayout();
             // 
             // toolStrip1
             // 
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.btnOpen,
-            this.btnDetectEdges,
+            this.toolStripDropDownButton1,
             this.btnSave,
             this.btnSaveCSV});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
@@ -58,22 +60,6 @@
             this.toolStrip1.Size = new System.Drawing.Size(462, 25);
             this.toolStrip1.TabIndex = 0;
             this.toolStrip1.Text = "toolStrip1";
-            // 
-            // layout1
-            // 
-            this.layout1.ColumnCount = 2;
-            this.layout1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 150F));
-            this.layout1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 312F));
-            this.layout1.Controls.Add(this.layout2, 1, 0);
-            this.layout1.Controls.Add(this.panel1, 0, 0);
-            this.layout1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.layout1.Location = new System.Drawing.Point(0, 25);
-            this.layout1.Margin = new System.Windows.Forms.Padding(0);
-            this.layout1.Name = "layout1";
-            this.layout1.RowCount = 1;
-            this.layout1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.layout1.Size = new System.Drawing.Size(462, 618);
-            this.layout1.TabIndex = 1;
             // 
             // btnOpen
             // 
@@ -95,6 +81,32 @@
             this.btnSave.Text = "Save image";
             this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
             // 
+            // btnSaveCSV
+            // 
+            this.btnSaveCSV.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.btnSaveCSV.Image = ((System.Drawing.Image)(resources.GetObject("btnSaveCSV.Image")));
+            this.btnSaveCSV.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnSaveCSV.Name = "btnSaveCSV";
+            this.btnSaveCSV.Size = new System.Drawing.Size(62, 22);
+            this.btnSaveCSV.Text = "Save .CSV";
+            this.btnSaveCSV.Click += new System.EventHandler(this.btnSaveCSV_Click);
+            // 
+            // layout1
+            // 
+            this.layout1.ColumnCount = 2;
+            this.layout1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 150F));
+            this.layout1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 312F));
+            this.layout1.Controls.Add(this.layout2, 1, 0);
+            this.layout1.Controls.Add(this.panel1, 0, 0);
+            this.layout1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.layout1.Location = new System.Drawing.Point(0, 25);
+            this.layout1.Margin = new System.Windows.Forms.Padding(0);
+            this.layout1.Name = "layout1";
+            this.layout1.RowCount = 1;
+            this.layout1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.layout1.Size = new System.Drawing.Size(462, 618);
+            this.layout1.TabIndex = 1;
+            // 
             // layout2
             // 
             this.layout2.ColumnCount = 1;
@@ -111,14 +123,6 @@
             this.layout2.Size = new System.Drawing.Size(306, 612);
             this.layout2.TabIndex = 0;
             // 
-            // picture1
-            // 
-            this.picture1.Location = new System.Drawing.Point(3, 3);
-            this.picture1.Name = "picture1";
-            this.picture1.Size = new System.Drawing.Size(300, 300);
-            this.picture1.TabIndex = 1;
-            this.picture1.TabStop = false;
-            // 
             // picture2
             // 
             this.picture2.Location = new System.Drawing.Point(3, 309);
@@ -127,15 +131,13 @@
             this.picture2.TabIndex = 2;
             this.picture2.TabStop = false;
             // 
-            // btnDetectEdges
+            // picture1
             // 
-            this.btnDetectEdges.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.btnDetectEdges.Image = ((System.Drawing.Image)(resources.GetObject("btnDetectEdges.Image")));
-            this.btnDetectEdges.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btnDetectEdges.Name = "btnDetectEdges";
-            this.btnDetectEdges.Size = new System.Drawing.Size(79, 22);
-            this.btnDetectEdges.Text = "Detect edges";
-            this.btnDetectEdges.Click += new System.EventHandler(this.btnDetectEdges_Click);
+            this.picture1.Location = new System.Drawing.Point(3, 3);
+            this.picture1.Name = "picture1";
+            this.picture1.Size = new System.Drawing.Size(300, 300);
+            this.picture1.TabIndex = 1;
+            this.picture1.TabStop = false;
             // 
             // panel1
             // 
@@ -145,15 +147,31 @@
             this.panel1.Size = new System.Drawing.Size(144, 612);
             this.panel1.TabIndex = 1;
             // 
-            // btnSaveCSV
+            // toolStripDropDownButton1
             // 
-            this.btnSaveCSV.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.btnSaveCSV.Image = ((System.Drawing.Image)(resources.GetObject("btnSaveCSV.Image")));
-            this.btnSaveCSV.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btnSaveCSV.Name = "btnSaveCSV";
-            this.btnSaveCSV.Size = new System.Drawing.Size(62, 22);
-            this.btnSaveCSV.Text = "Save .CSV";
-            this.btnSaveCSV.Click += new System.EventHandler(this.btnSaveCSV_Click);
+            this.toolStripDropDownButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.toolStripDropDownButton1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.btnDetectEdges,
+            this.btnBoundaryDetection});
+            this.toolStripDropDownButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripDropDownButton1.Image")));
+            this.toolStripDropDownButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripDropDownButton1.Name = "toolStripDropDownButton1";
+            this.toolStripDropDownButton1.Size = new System.Drawing.Size(113, 22);
+            this.toolStripDropDownButton1.Text = "Image processing";
+            // 
+            // btnDetectEdges
+            // 
+            this.btnDetectEdges.Name = "btnDetectEdges";
+            this.btnDetectEdges.Size = new System.Drawing.Size(219, 22);
+            this.btnDetectEdges.Text = "Detect edges (old)";
+            this.btnDetectEdges.Click += new System.EventHandler(this.btnDetectEdges_Click);
+            // 
+            // btnBoundaryDetection
+            // 
+            this.btnBoundaryDetection.Name = "btnBoundaryDetection";
+            this.btnBoundaryDetection.Size = new System.Drawing.Size(219, 22);
+            this.btnBoundaryDetection.Text = "Boundary detection (green)";
+            this.btnBoundaryDetection.Click += new System.EventHandler(this.btnBoundaryDetection_Click);
             // 
             // MainForm
             // 
@@ -172,8 +190,8 @@
             this.toolStrip1.PerformLayout();
             this.layout1.ResumeLayout(false);
             this.layout2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.picture1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.picture2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.picture1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -188,9 +206,11 @@
         private System.Windows.Forms.TableLayoutPanel layout2;
         private System.Windows.Forms.PictureBox picture2;
         private System.Windows.Forms.PictureBox picture1;
-        private System.Windows.Forms.ToolStripButton btnDetectEdges;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.ToolStripButton btnSaveCSV;
+        private System.Windows.Forms.ToolStripDropDownButton toolStripDropDownButton1;
+        private System.Windows.Forms.ToolStripMenuItem btnDetectEdges;
+        private System.Windows.Forms.ToolStripMenuItem btnBoundaryDetection;
     }
 }
 
