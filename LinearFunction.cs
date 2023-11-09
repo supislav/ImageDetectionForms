@@ -21,7 +21,7 @@ namespace Drum
         // Show a message box with linear function, because othervise it would throw an error (who knows why :))
         public void Show()
         {
-            MessageBox.Show($"Linear Function: y = {K:F4}x + {N:F4}");
+            MessageBox.Show($"Linear Function: y = {K:F4}x + {N:F4}"); // :F4 - 4 decimal places
         }
     }
 

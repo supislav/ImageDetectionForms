@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace Drum
@@ -20,8 +21,8 @@ namespace Drum
         public static Point[] points { get; set; }
 
 
-        // Aproximation of points
-        public static LinearFunction Aproximation(Bitmap image)
+        // Aproximation of points (LINEAR FUNCTION)
+        public static LinearFunction ApproximationLinear(Bitmap image)
         {
             points = FindWhiteOrGreenPixels(image);
             double sumX = 0;
@@ -44,7 +45,7 @@ namespace Drum
             return new LinearFunction(k, n);
         }
 
-        // Find the white pixels (points for approximation)
+        // Find the white or green pixels (points for approximation)
         private static Point[] FindWhiteOrGreenPixels(Bitmap bitmap)
         {
             List<Point> whiteGreenPixels = new List<Point>();
@@ -54,12 +55,8 @@ namespace Drum
                 for (int x = 0; x < bitmap.Width; x++)
                 {
                     Color pixel = bitmap.GetPixel(x, y);
-                    //pixel.R == 255 && pixel.G == 255 && pixel.B == 255
-                    if (IsWhite(pixel)) // Check if the pixel is white
-                    {
-                        whiteGreenPixels.Add(new Point(x, y));
-                    }
-                    if (IsGreen(pixel)) // Check if the pixel is green
+                    
+                    if (IsGreenOrWhite(pixel))
                     {
                         whiteGreenPixels.Add(new Point(x, y));
                     }
@@ -68,27 +65,14 @@ namespace Drum
             return whiteGreenPixels.ToArray();
         }
 
-        // Check if the pixel is green-ish
-        private static bool IsGreen(Color color)
+        // Check if the pixel is green-ish or white-ish 
+        private static bool IsGreenOrWhite(Color color)
         {
             int greenThreshold = 100;
-
-            if (color.G - color.R > greenThreshold && color.G - color.B > greenThreshold)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-
-        // Check if the pixel is white-ish
-        private static bool IsWhite(Color color)
-        {
             int whiteThreshold = 100;
 
-            if (color.R > whiteThreshold && color.G > whiteThreshold && color.B > whiteThreshold)
+            if ((color.G - color.R > greenThreshold && color.G - color.B > greenThreshold) || // Check if pixels are green-ish or
+                (color.R > whiteThreshold && color.G > whiteThreshold && color.B > whiteThreshold)) //Check if pixels are white-ish
             {
                 return true;
             }
@@ -116,6 +100,9 @@ namespace Drum
                 }
             }
         }
+
+        
+
     }
 
     //internal static class PointExtensions

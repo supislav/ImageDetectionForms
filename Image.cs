@@ -9,6 +9,7 @@ namespace Drum
 {
     internal static class Image
     {
+        // Image opening
         public static Bitmap Open()
         {
             OpenFileDialog ofd = new OpenFileDialog();
@@ -34,6 +35,7 @@ namespace Drum
             return originalImage;
         }
 
+        // Edge detection with Sobel algorithm
         public static Bitmap DetectEdges(ref Bitmap originalImage)
         {
             // Stopwatch
@@ -60,10 +62,18 @@ namespace Drum
             // Dispose of the used image
             processedImage.Dispose();
 
+
+            // LINEAR FUNCTION
             // Get the actual function that best fits the points
-            LinearFunction linearFunction = Point.Aproximation(edgeImage);
+            LinearFunction linearFunction = Point.ApproximationLinear(edgeImage);
             // Display the linear function in message box
             linearFunction.Show();
+
+            // QUADRATIC FUNCTION
+            // Get the actual function that best fits the points
+            //Polynom polynom = Point.ApproximationQuadratic(edgeImage);
+            // Display the linear function in message box
+            //polynom.Show();
 
             // Display the time spent to process the image
             MessageBox.Show($"Time elapsed: {stopwatch.ElapsedMilliseconds} milliseconds");
@@ -175,7 +185,7 @@ namespace Drum
             return processedImage;
         }
 
-        // Boundary detection
+        // Boundary detection - 1.5x faster
         public static Bitmap DetectBoundary(Bitmap image)
         {
             Stopwatch stopwatch = new Stopwatch();
@@ -193,7 +203,7 @@ namespace Drum
             stopwatch.Stop();
 
             // Aproximate the points and get linear function parameters
-            LinearFunction linearFunction = Point.Aproximation(result);
+            LinearFunction linearFunction = Point.ApproximationLinear(result);
             // Display the linear function in message box
             linearFunction.Show();
 
@@ -203,6 +213,7 @@ namespace Drum
             return result;
         }
 
+        // Kernel "stamp"
         static bool Stamp(Bitmap bitmap, int x, int y)
         {
             int[,] stamp = new int[,] { { 0, 1, 0 }, { 1, 1, 1 }, { 0, 1, 0 } };
@@ -306,6 +317,5 @@ namespace Drum
 
         //    return blurredImage;
         //}
-
     }
 }

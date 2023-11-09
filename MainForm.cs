@@ -31,30 +31,39 @@ namespace Drum
 
         private void btnOpen_Click(object sender, EventArgs e)
         {
-
+            // Image opening
             originalImage = Image.Open();
             picture1.Image = originalImage;
         }
 
         private void btnDetectEdges_Click(object sender, EventArgs e)
         {
+            // Edge detection
             edgeImage = Image.DetectEdges(ref originalImage);
             picture2.Image = edgeImage;
         }
 
         private void btnSave_Click(object sender, EventArgs e)
         {
+            // Save the image as .PNG
             Image.Save(picture2);
         }
 
         private void btnSaveCSV_Click(object sender, EventArgs e)
         {
+            // Save the points in .CSV file
             Point.Save();
         }
 
         private void btnBoundaryDetection_Click(object sender, EventArgs e)
         {
+            // Boundary detection
             picture2.Image = Image.DetectBoundary(originalImage);
+        }
+
+        private void btnTest_Click(object sender, EventArgs e)
+        {
+            
         }
     }
 }

@@ -35,13 +35,14 @@
             this.btnDetectEdges = new System.Windows.Forms.ToolStripMenuItem();
             this.btnBoundaryDetection = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripDropDownButton2 = new System.Windows.Forms.ToolStripDropDownButton();
+            this.btnSaveImage = new System.Windows.Forms.ToolStripMenuItem();
+            this.btnSavePng = new System.Windows.Forms.ToolStripMenuItem();
             this.layout1 = new System.Windows.Forms.TableLayoutPanel();
             this.layout2 = new System.Windows.Forms.TableLayoutPanel();
             this.picture2 = new System.Windows.Forms.PictureBox();
             this.picture1 = new System.Windows.Forms.PictureBox();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.btnSaveImage = new System.Windows.Forms.ToolStripMenuItem();
-            this.btnSavePng = new System.Windows.Forms.ToolStripMenuItem();
+            this.btnTest = new System.Windows.Forms.ToolStripButton();
             this.toolStrip1.SuspendLayout();
             this.layout1.SuspendLayout();
             this.layout2.SuspendLayout();
@@ -54,7 +55,8 @@
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.btnOpen,
             this.toolStripDropDownButton1,
-            this.toolStripDropDownButton2});
+            this.toolStripDropDownButton2,
+            this.btnTest});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Size = new System.Drawing.Size(462, 25);
@@ -108,6 +110,20 @@
             this.toolStripDropDownButton2.Name = "toolStripDropDownButton2";
             this.toolStripDropDownButton2.Size = new System.Drawing.Size(44, 22);
             this.toolStripDropDownButton2.Text = "Save";
+            // 
+            // btnSaveImage
+            // 
+            this.btnSaveImage.Name = "btnSaveImage";
+            this.btnSaveImage.Size = new System.Drawing.Size(145, 22);
+            this.btnSaveImage.Text = "Image (.PNG)";
+            this.btnSaveImage.Click += new System.EventHandler(this.btnSave_Click);
+            // 
+            // btnSavePng
+            // 
+            this.btnSavePng.Name = "btnSavePng";
+            this.btnSavePng.Size = new System.Drawing.Size(145, 22);
+            this.btnSavePng.Text = "CSV file";
+            this.btnSavePng.Click += new System.EventHandler(this.btnSaveCSV_Click);
             // 
             // layout1
             // 
@@ -165,19 +181,15 @@
             this.panel1.Size = new System.Drawing.Size(144, 612);
             this.panel1.TabIndex = 1;
             // 
-            // btnSaveImage
+            // btnTest
             // 
-            this.btnSaveImage.Name = "btnSaveImage";
-            this.btnSaveImage.Size = new System.Drawing.Size(180, 22);
-            this.btnSaveImage.Text = "Image (.PNG)";
-            this.btnSaveImage.Click += new System.EventHandler(this.btnSave_Click);
-            // 
-            // btnSavePng
-            // 
-            this.btnSavePng.Name = "btnSavePng";
-            this.btnSavePng.Size = new System.Drawing.Size(180, 22);
-            this.btnSavePng.Text = "CSV file";
-            this.btnSavePng.Click += new System.EventHandler(this.btnSaveCSV_Click);
+            this.btnTest.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.btnTest.Image = ((System.Drawing.Image)(resources.GetObject("btnTest.Image")));
+            this.btnTest.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnTest.Name = "btnTest";
+            this.btnTest.Size = new System.Drawing.Size(35, 22);
+            this.btnTest.Text = "TEST";
+            this.btnTest.Click += new System.EventHandler(this.btnTest_Click);
             // 
             // MainForm
             // 
@@ -218,6 +230,7 @@
         private System.Windows.Forms.ToolStripDropDownButton toolStripDropDownButton2;
         private System.Windows.Forms.ToolStripMenuItem btnSaveImage;
         private System.Windows.Forms.ToolStripMenuItem btnSavePng;
+        private System.Windows.Forms.ToolStripButton btnTest;
     }
 }
 
